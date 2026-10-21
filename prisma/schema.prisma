@@ -1,0 +1,33 @@
+// This is your Prisma schema file, 
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Player {
+  id String @id @default(uuid())
+  username String @unique
+  createdAt DateTime @default(now())
+  games Game[]
+}
+
+model Game {
+  id             String   @id @default(uuid())
+  playerId       String
+  player         Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  score          Int      @default(0)
+  moves          Int      @default(0)
+  timeSeconds    Int      @default(0)
+  status         String   @default("IN_PROGRESS")
+  boardStateJson String   @default("{}")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
