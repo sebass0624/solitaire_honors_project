@@ -13,6 +13,7 @@
     "@prisma/adapter-libsql": "^7.10.1",
     "@prisma/adapter-mariadb": "^7.10.1",
     "@prisma/client": "^7.10.0",
+    "mariadb": "^3.5.4",
     "next": "16.4.1",
     "react": "19.3.0",
     "react-dom": "19.3.0"
