@@ -1,69 +1,64 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+//Makes next.js run this as interactive
+'use client';
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.js</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+import React, {useState, useEffect} from 'react';
+import Board from '../components/Board.jsx';
+import {createInitialState} from '../lib/solitaire/state.js';
+import {drawFromStock} from '@/lib/solitaire/rules.js';
+
+//Creates function to initailize game engine 
+export default function SolitairePage() {
+    //Declares variable to hold game board
+    const [gameState, setGameState] = useState(null);
+    //Declares state to track currently selected card
+    const [selectedCard, setSelectedCard] = useState(null);
+
+    //Initalizes gameboard when component successfully mounts on to screen
+    useEffect(() => {
+    const newGame = createInitialState();
+    setGameState(newGame);
+  }, []);
+
+    //Helper function for clicking the stock pile
+    const handleStockClick = () => {
+      if(gameState) {
+        //Clears the desired section when drawing a new card
+        setSelectedCard(null);
+        const updatedState = drawFromStock(gameState);
+        setGameState(updatedState);
+      }
+    };
+    
+    //Helper function for selecting the card and choosing its location
+    const handleCardClick = (card, source, colIndex, cardIndex) => {
+      if(!selectedCard) {
+        if(card && card.faceUp) {
+          setSelectedCard({card, source, colIndex, cardIndex});
+        }
+      }
+
+      else if(selectedCard.card === card) {
+        setSelectedCard(null);
+      }
+    };
+
+    //Checks if game has fully loaded in or not and initalizes it
+    if(!gameState) {
+      return (
+        <main className="solitaire-container">
+          <div className="loading">Initializing Solitaire Deck...</div>
+        </main>
+      );
+    }
+    else {
+      return (
+        <main className="solitaire-container">
+          <Board gameState = {gameState} 
+                 onStockClick = {handleStockClick}
+                 onCardClick = {handleCardClick}
+                 selectedCard = {selectedCard}/>
+        </main>
+      );
+    }
 }
+
