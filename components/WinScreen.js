@@ -1,7 +1,7 @@
 'use client';
 import {useState} from 'react';
 
-export default function WinModal({moves, timeSeconds, isOpen, onSubmitSuccess}) {
+export default function WinScreen({moves, timeSeconds, isOpen, onSubmitSuccess}) {
     const [playerName, setPlayerName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
