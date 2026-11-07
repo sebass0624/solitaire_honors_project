@@ -5,6 +5,8 @@ import React, {useState, useEffect} from 'react';
 import Board from '../components/Board.jsx';
 import {createInitialState} from '../lib/solitaire/state.js';
 import {drawFromStock, moveToFoundation, moveToTableau} from '@/lib/solitaire/rules.js';
+import WinScreen from '@/components/WinScreen';
+import Leaderboard from '@/components/leaderboard';
 
 //Creates function to initailize game engine 
 export default function SolitairePage() {
@@ -12,6 +14,13 @@ export default function SolitairePage() {
     const [gameState, setGameState] = useState(null);
     //Declares state to track currently selected card
     const [selectedCard, setSelectedCard] = useState(null);
+    //Tracks leaderboard refresh key & win screen state
+    const [refreshLeaderboard, setRefreshLeaderboard] = useState(0);
+
+    const handleScoreSubmitted = () => {
+      setGameState((prev) => (prev ? {...prev, isWon: false, isGameWon: false,}:prev));
+      setRefreshLeaderboard((prev) => prev + 1);
+    }
 
     //Initalizes gameboard when component successfully mounts on to screen
     useEffect(() => {
@@ -82,13 +91,23 @@ export default function SolitairePage() {
     }
     else {
       return (
-        <main className="solitaire-container">
-          <Board gameState = {gameState} 
-                 onStockClick = {handleStockClick}
-                 onCardClick = {handleCardClick}
-                 selectedCard = {selectedCard}/>
-        </main>
-      );
-    }
-}
+    <main className="solitaire-container">
+      <Board
+        gameState={gameState}
+        onStockClick={handleStockClick}
+        onCardClick={handleCardClick}
+        selectedCard={selectedCard}
+      />
 
+      <WinScreen
+        moves={gameState.moves || 0}
+        timeSeconds={gameState.timer || gameState.timeSeconds || 0}
+        isOpen={Boolean(gameState.isWon || gameState.isGameWon)}
+        onSubmitSuccess={handleScoreSubmitted}
+      />
+
+      <Leaderboard refreshKey={refreshLeaderboard} />
+    </main>
+  );
+ }
+}
