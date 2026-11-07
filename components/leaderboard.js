@@ -2,7 +2,7 @@
 
 import {useState, useEffect} from 'react';
 
-export default function({refreshKey}) {
+export default function Leaderboard({refreshKey}) {
     const [scores, setScores] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ export default function({refreshKey}) {
             setScores(data);
         }
         catch (err) {
-            console.err(err);
+            console.error(err);
             setError('Could not get leaderboard');
         }
         finally {
@@ -68,6 +68,23 @@ export default function({refreshKey}) {
     );
 }
 
-const ContainerStyle = {
-    
-}
+const containerStyle = {
+    background: '#ffffff',
+    padding: '16px',
+    borderRadius: '8px',
+    color: '#333',
+    marginTop: '15px',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    maxWidth: '390px',
+    margin: '20px auto 0 auto',
+};
+
+const tableStyle = {
+    width: '100%',
+    borderCollapse: 'collapse',
+    fontSize: '0.9rem',
+};
+
+const cellStyle = {
+    padding: '6px 8px',
+};
