@@ -3,35 +3,39 @@ import React from 'react';
 //Maps numercal ranks to card letters
 const RANK_MAP = {1: 'A', 11: 'J', 12: 'Q', 13: 'K'};
 //Maps suit names to symbols
-const SUIT_SYMBOLS = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+const SUIT_SYMBOLS = {hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠'};
 
-//Creates function that accepts card object to ensure 
-//card object isn't null or flipped over, rendering empty/flipped design respectively
+//Function component that accepts a card object and renders empty, face-down, or face-up designs
 export default function Card({card, onClick, isSelected = false}) {
-    if (!card ) {
+    //Renders empty card slot if card object is null
+    if (!card) {
         return <div className="card empty-slot" />;
     }
 
+    //Renders face-down card and retains click handler stock flip events
     if(!card.faceUp) {
-        return <div className="card card-back" />;
+        return <div className="card card-back" onClick = {onClick}/>;
     }
 
-//Decides whether or not card should have selected class
+//Determines CSS class names for each section
 let cardClassName = "card card-front";
-
 if(isSelected) {
   cardClassName = "card card-front selected";
 }
 
-//Determines each suit's symbol and color
-let colorClass = "black";
-if(card.suit === 'HEARTS' || card.suit === 'DIAMONDS') {
-  colorClass = "red";
+//Normalizes suit string to lowercase to be consistent with deck.js
+const normalizedSuit = card.suit ? card.suit.toLowerCase(): '';
+
+//Determines color based off above suit
+let colorClass = 'black';
+if (normalizedSuit === 'hearts' || normalizedSuit === 'diamonds') {
+    colorClass = 'red';
 }
-//Constant that convert numerical rank to the numbers using RANK_MAP
-const rankLabel = RANK_MAP[card.rank] || card.rank;
+
+//Constant that converts numerical rank to the numbers using RANK_MAP
+const rankLabel = RANK_MAP[card.rank] || card.value || card.rank;
 //Constant that converts suit name to symbol using SUIT_SYMBOLS
-const suitSymbol = SUIT_SYMBOLS[card.suit];
+const suitSymbol = SUIT_SYMBOLS[normalizedSuit] || '';
 
 //Renders face-up card with correct color/suit characteristics to the screen
 return (
