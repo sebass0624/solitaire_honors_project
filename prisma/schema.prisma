@@ -3,32 +3,37 @@
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
+
+//Generates block that is responsible for creation of Prisma Client/enables driver
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
+//Block that specifies database provider engine (MySQL) and connection URL
 datasource db {
   provider = "mysql"
+  url = env("DATABASE_URL")
 }
 
+//Player model that represents each user on the system, all credentials stored via one-to-many relationship
 model Player {
-  id String @id @default(uuid())
-  username String @unique
-  createdAt DateTime @default(now())
-  games Game[]
+  id String @id @default(uuid()) //Unique ID generated upon player creation
+  username String @unique //Unique username for player
+  createdAt DateTime @default(now()) //Holds timestamp at which player was created
+  games Game[] //One-to-many relationship, allowing single player to have many game sessions open at once
 }
 
+//Game model that represents each Solitaire game session, tracking wide variety of characteristics
 model Game {
-  id             String   @id @default(uuid())
-  playerId       String
-  player         Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  score          Int      @default(0)
-  moves          Int      @default(0)
-  timeSeconds    Int      @default(0)
-  status         String   @default("IN_PROGRESS")
-  boardStateJson String   @default("{}")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id             String   @id @default(uuid()) //Unique ID generated for each game session
+  playerId       String //Foreign key that references the current player/owner of the session
+  player         Player   @relation(fields: [playerId], references: [id], onDelete: Cascade) //How session links back to original player/deletes all previous leaderboard entries/references if associated player is deleted
+  score          Int      @default(0) //Represents score accumulated during game session
+  moves          Int      @default(0) //Represents amount of moves made during game session
+  timeSeconds    Int      @default(0) //Represents total elapsed time during gameplay (seconds)
+  status         String   @default("IN_PROGRESS") //Represents current status of game (IN_PROGRESS, WON, OR ABANDONED)
+  boardStateJson String   @default("{}") //JSON String representation of the active game board state (cards, moves, etc).
+  createdAt      DateTime @default(now()) //Defines time at which game session was started
+  updatedAt      DateTime @updatedAt //Defines time at which game session/record is updated
 }
-
