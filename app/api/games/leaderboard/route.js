@@ -7,7 +7,7 @@ export async function GET() {
         const [rows] = await pool.query(
             'SELECT id, player_name, moves, time_seconds, created_at FROM leaderboard ORDER BY moves ASC, time_seconds ASC LIMIT 10'
         );
-        return NextResponse.json(rows); 
+        return NextResponse.json({success: true, data: rows}); 
     }
 
     catch (error) {

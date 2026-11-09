@@ -10,20 +10,20 @@ export default function Leaderboard({refreshKey}) {
 
     //Fetches all leaderboard data from API
     const fetchScores = async () => {
-        setLoading(true);
-        try {
-            const res = await fetch('/api/leaderboard');
-            if (!res.ok) throw new Error("Failed to load scores");
-            const data = await res.json();
-            setScores(data);
+    try {
+        const res = await fetch('/api/leaderboard');
+    if (!res.ok) {
+      console.warn('Leaderboard API returned status:', res.status);
+      setScores([]);
+      return;
         }
-        catch (err) {
-            console.error(err);
-            setError('Could not get leaderboard');
-        }
-        finally {
-            setLoading(false);
-        }
+    const result = await res.json();
+    const scoresArray = Array.isArray(result) ? result : (result.data || []);
+    setScores(scoresArray);
+    } catch (err) {
+    console.error('Fetch error:', err);
+    setScores([]);
+    }
     };
 
     //Refetches score once refreshKey changes

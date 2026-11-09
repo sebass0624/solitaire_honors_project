@@ -1,10 +1,10 @@
 //Makes next.js run this as interactive
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Board from '../components/Board.jsx';
-import {createInitialState} from '../lib/solitaire/state.js';
-import {drawFromStock, moveToFoundation, moveToTableau} from '@/lib/solitaire/rules.js';
+import { InitalizeGame as createInitialState } from '../lib/solitaire/state.js';
+import { drawFromStock, moveToFoundation, moveToTableau } from '@/lib/solitaire/rules.js';
 import WinScreen from '@/components/WinScreen';
 import Leaderboard from '@/components/leaderboard';
 
