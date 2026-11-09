@@ -1,9 +1,9 @@
 import React from 'react';
 import Card from './Card';
 
-//Creates function that accepts the array of cards for this column and its column index
+//Function responsible for rendering individual column in tableau area and handles rendering both empty drops/vertical stacking of cards
 export default function TableauColumn({cards = [], colIndex, onCardClick, selectedCard}) {
-    //Renders an empty card slot if the column has 0 cards
+    //Renders an empty card slot if the column doesn't exist
     if (cards.length === 0) {
         return (
             <div 
@@ -15,24 +15,29 @@ export default function TableauColumn({cards = [], colIndex, onCardClick, select
         );
     }
     
-    //If more than zero cards, this return statement renders the tableau container
+    //If more than zero cards, this return statement renders the tableau container with overlapping cards
     return(
         <div className="tableau-column">
             {cards.map((card, cardIndex) => {
-                //Checks if card matches the active selection
+                //Checks if card matches the active selection using unique card ID
                 let isSelected = false;
-                if(selectedCard && selectedCard.card === card) {
-                    isSelected = true;
+                if(selectedCard && selectedCard.card) {
+                    isSelected = selectedCard.card.id === card.id || selectedCard.card === card;
                 } 
 
-                //Handle Click event when tableau card accessed
+                //Handle click event when tableau card within specified column is accessed
                 const handleCardClickInTableau = () => {
                     if (onCardClick) {
                         onCardClick(card, 'tableau', colIndex, cardIndex);
                     }
                 };
+                //Returns rendered tableau column with proper vertical card offset
                 return (
-                    <div key = {`col-${colIndex}-card-${cardIndex}`} className = "tableau-card-wrapper">
+                    <div 
+                        key={`col-${colIndex}-card-${cardIndex}`} 
+                        className="tableau-card-wrapper"
+                        style={{top: `${cardIndex * 25}px`}}
+                    >
                         <Card
                             card = {card}
                             isSelected = {isSelected}
