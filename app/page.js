@@ -49,18 +49,18 @@ export default function SolitairePage() {
     //Helper function for selecting the card and choosing its location
     const handleCardClick = (targetCard, source, colIndexOrSuit, cardIndex) => {
       //Case 1: No card selected yet -> select card if its faceup
-      if(!selectedCard) {
-        if(targetCard && targetCard.faceUp) {
-          setSelectedCard({
-            card: targetCard,
-            source,
-            colIndex: typeof colIndexOrSuit === 'number' ? colIndexOrSuit: undefined,
-            suit: typeof colIndexOrSuit === 'string' ? colIndexOrSuit: undefined,
-            cardIndex
-        });
-      } 
-      return;
-    }
+      if (!selectedCard) {
+            if (targetCard && targetCard.faceUp) {
+                setSelectedCard({
+                    card: targetCard,
+                    source,
+                    colIndex: typeof colIndexOrSuit === 'number' ? colIndexOrSuit : undefined,
+                    suit: typeof colIndexOrSuit === 'string' ? colIndexOrSuit : undefined,
+                    cardIndex
+                });
+            }
+            return;
+        }
 
       //Case 2: Clicking exact card -> deselect it
       if(selectedCard.card?.id === targetCard?.id || selectedCard.card === targetCard) {
@@ -114,11 +114,11 @@ export default function SolitairePage() {
     return (
       <main className="solitaire-container">
         {/*New Game Button*/}
-        <div style= {{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
-          <h1 style= {{margin: 0, fontSize: '1.5rem'}}>Solitaire</h1>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
+          <h1 style={{margin: 0, fontSize: '1.5rem'}}>Solitaire</h1>
           <button
-            onClick = {handleNewGame}
-            style = {{padding: '8px 16px', borderRadius: '4px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold'}}
+            onClick={handleNewGame}
+            style={{padding: '8px 16px', borderRadius: '4px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold'}}
           >
             New Game
           </button>
