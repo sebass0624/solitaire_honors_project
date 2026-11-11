@@ -6,7 +6,7 @@ import React, {useState, useEffect} from 'react';
 import Board from '../components/Board';
 import Leaderboard from '@/components/leaderboard';
 import {InitializeGame as createInitialState} from '../lib/solitaire/state.js';
-import {drawFromStock, moveToFoundation, moveToTableau} from '@/lib/solitaire/rules.js';
+import {drawFromStock, moveFoundationToTableau, moveToFoundation, moveToTableau, moveWasteToTableau} from '@/lib/solitaire/rules.js';
 import WinScreen from '@/components/WinScreen';
 
 //Creates function that manages game loop state, selection, routing, and win screen
@@ -67,6 +67,22 @@ export default function SolitairePage() {
               return;
             }
 
+            //Attempts an automove if the foundation carad move isn't found to be valid
+            for (let colIndx = 0; colIndx < gameState.tableau.length; colIndx++) {
+              let autoTableauState = null;
+              if (source === 'tableau' && colIndx !== candidateSelection.colIndex) {
+                autoTableauState = moveToTableau(gameState, candidateSelection.colIndex, candidateSelection.cardIndex, colIndx);
+              }
+              else if (source === 'waste') {
+                autoTableauState = moveWasteToTableau(gameState, colIndx);
+              }
+
+              if (autoTableauState && autoTableauState !== gameState) {
+                setGameState(autoTableauState);
+                return;
+              }
+            }
+
             setSelectedCard(candidateSelection);
           }
         return;
@@ -82,9 +98,18 @@ export default function SolitairePage() {
       let updatedState = null;
 
       if(source === 'tableau') {
-         updatedState = moveToTableau(gameState, selectedCard, colIndexOrSuit);
+        const targetColIndex = colIndexOrSuit;
+        if(selectedCard.source === 'tableau') {
+          updatedState = moveToTableau(gameState, selectedCard.colIndex, selectedCard.cardIndex, targetColIndex);
+        }
+        else if(selectedCard.source === 'waste') {
+          updatedState = moveWasteToTableau(gameState, targetColIndex);
+        }
+        else if(selectedCard.source === 'foundation') {
+          updatedState = moveFoundationToTableau(gameState, selectedCard.suit, targetColIndex);
+        }
       }
-        
+      
       else if (source === 'foundation') {
         updatedState = moveToFoundation(gameState, selectedCard.source, selectedCard.colIndex, colIndexOrSuit);
       }
