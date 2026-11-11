@@ -144,6 +144,14 @@ body {
   position: relative;
 }
 
+.tableau-column .card-wrapper {
+  margin-top: -75px;
+}
+
+.tableau-column .card-wrapper:first-child {
+  margin-top: 0
+}
+
 .tableau-card-wrapper {
   margin-top: -100px;
 }
