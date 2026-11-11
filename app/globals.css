@@ -142,6 +142,8 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100px;
+  min-height: 140px;
 }
 
 .tableau-column .card-wrapper {
