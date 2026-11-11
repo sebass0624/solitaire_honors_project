@@ -113,12 +113,12 @@ export default function SolitairePage() {
 
     return (
       <main className="solitaire-container">
-        {/*New Game Button*/}
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
-          <h1 style={{margin: 0, fontSize: '1.5rem'}}>Solitaire</h1>
+        {/*Solitaire bold icon and new game button*/}
+        <div style={{maxWidth: '100%', margin: '0 auto 20px auto', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', width: '100%', boxSizing: 'border-box'}}>
+          <h1 style={{margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#ffffff'}}>Solitaire</h1>
           <button
             onClick={handleNewGame}
-            style={{padding: '8px 16px', borderRadius: '4px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold'}}
+            style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
           >
             New Game
           </button>
