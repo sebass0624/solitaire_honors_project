@@ -41,7 +41,7 @@ export default function TableauColumn({cards = [], colIndex, onCardClick, select
                         <Card
                             card = {card}
                             isSelected = {isSelected}
-                            onClick = {handleCardClickInTableau} 
+                            onClick = {() => onCardClick && onCardClick(card, 'tableau', colIndex, cardIndex)}
                             />
                     </div>
                 );

@@ -18,7 +18,7 @@ export default function Leaderboard({refreshKey}) {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch('/api/leaderboard');
+            const res = await fetch('/api/games/leaderboard');
             if (!res.ok) {
                 console.warn('Leaderboard API returned status:', res.status);
                 setError('Failed to load leaderboard scores.')
@@ -31,7 +31,7 @@ export default function Leaderboard({refreshKey}) {
         setScores(scoresArray);
             } 
         catch (err) {
-            console.error('Fetch error:', err);;
+            console.error('Fetch error:', err);
             setError('Failed to load leaderboard scores.');
             setScores([]);
         }
@@ -75,9 +75,9 @@ export default function Leaderboard({refreshKey}) {
                     {scores.map((score, index) => (
                         <tr key= {score.id || index} style= {{borderBottom: '1px solid #eee'}}>
                             <td style={cellStyle}>{index + 1}</td>
-                            <td style={cellStyle}>{score.player_name}</td>
+                            <td style={cellStyle}>{score.player_name || score.playerName || 'Anonymous'}</td>
                             <td style={cellStyle}>{score.moves}</td>
-                            <td style={cellStyle}>{score.time_seconds}s</td>                                                        
+                            <td style={cellStyle}>{score.time_seconds ?? score.timeSeconds ?? 0}s</td>                                                        
                         </tr>
                      ))}
                 </tbody>

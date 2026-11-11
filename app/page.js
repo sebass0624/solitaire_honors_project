@@ -48,19 +48,29 @@ export default function SolitairePage() {
     
     //Helper function for selecting the card and choosing its location
     const handleCardClick = (targetCard, source, colIndexOrSuit, cardIndex) => {
-      //Case 1: No card selected yet -> select card if its faceup
+      //Case 1: No card selected yet -> auto-move to foundation
       if (!selectedCard) {
             if (targetCard && targetCard.faceUp) {
-                setSelectedCard({
+                const candidateSelection = {
                     card: targetCard,
                     source,
                     colIndex: typeof colIndexOrSuit === 'number' ? colIndexOrSuit : undefined,
                     suit: typeof colIndexOrSuit === 'string' ? colIndexOrSuit : undefined,
                     cardIndex
-                });
+                };
+
+                //Tries auto-move to foundation based on card's suit
+                const autoFoundationState = moveToFoundation(gameState, source, candidateSelection.colIndex, targetCard.suit);
+
+            if (autoFoundationState && autoFoundationState !== gameState) {
+              setGameState(autoFoundationState);
+              return;
             }
-            return;
-        }
+
+            setSelectedCard(candidateSelection);
+          }
+        return;
+      }
 
       //Case 2: Clicking exact card -> deselect it
       if(selectedCard.card?.id === targetCard?.id || selectedCard.card === targetCard) {
@@ -68,7 +78,7 @@ export default function SolitairePage() {
         return;
       }
 
-      //Case 3: Card already selected -> try to move it to desired tableau
+      //Case 3: Card already selected -> try to move it to desired location
       let updatedState = null;
 
       if(source === 'tableau') {
@@ -76,7 +86,7 @@ export default function SolitairePage() {
       }
         
       else if (source === 'foundation') {
-        updatedState = moveToFoundation(gameState, selectedCard, colIndexOrSuit);
+        updatedState = moveToFoundation(gameState, selectedCard.source, selectedCard.colIndex, colIndexOrSuit);
       }
 
       //If move is considered valid by rules.js file
@@ -118,7 +128,7 @@ export default function SolitairePage() {
           <h1 style={{margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#ffffff'}}>Solitaire</h1>
           <button
             onClick={handleNewGame}
-            style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
+            style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
           >
             New Game
           </button>
