@@ -153,6 +153,10 @@ export default function SolitairePage() {
         {/*Solitaire bold icon and new game button*/}
         <div style={{maxWidth: '100%', margin: '0 auto 20px auto', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', width: '100%', boxSizing: 'border-box'}}>
           <h1 style={{margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#ffffff'}}>Solitaire</h1>
+          {/*Holds move counter*/}
+          <div className="moves-counter">
+              Moves: <span>{gameState.moves ?? 0}</span>
+          </div>
           {/*Holds toggleable leaderabord*/}
           <div style={{position: 'relative', display: 'flex', alignItems: 'center', gap: '12px'}}>
             <button

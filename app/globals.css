@@ -189,5 +189,20 @@ body {
   max-width: 500px;
 }
 
+.moves-counter {
+  background-color: rgba(0, 0, 0, 0.35);
+  color: white;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.moves-counter span {
+  color:#a78c33;
+  margin-left: 4px;
+}
+
 
 
