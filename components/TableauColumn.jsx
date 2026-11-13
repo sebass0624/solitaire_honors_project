@@ -36,7 +36,7 @@ export default function TableauColumn({cards = [], colIndex, onCardClick, select
                     <div 
                         key={`col-${colIndex}-card-${cardIndex}`} 
                         className="tableau-card-wrapper"
-                        style={{top: `${cardIndex * 55}px`}}
+                        //style={{top: `${cardIndex * 55}px`}}
                     >
                         <Card
                             card = {card}
