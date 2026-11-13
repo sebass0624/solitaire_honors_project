@@ -18,7 +18,7 @@ export default function SolitairePage() {
     //Variable trigger that refetches leaderboard entries when a player wins
     const [refreshLeaderboard, setRefreshLeaderboard] = useState(0);
     //Triggers toggled leaderboard to take up minimal space on game board
-    const [showLeaderboard, setShowLeaderboard] = useState(0);
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
 
     //Initalizes deck state when component successfully mounts (game starts)
     useEffect(() => {
@@ -154,18 +154,27 @@ export default function SolitairePage() {
         <div style={{maxWidth: '100%', margin: '0 auto 20px auto', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', width: '100%', boxSizing: 'border-box'}}>
           <h1 style={{margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#ffffff'}}>Solitaire</h1>
           {/*Holds toggleable leaderabord*/}
-          <div style={{position: 'relative', display: 'flex', alignItems: 'center', gap: '12px'}}
+          <div style={{position: 'relative', display: 'flex', alignItems: 'center', gap: '12px'}}>
             <button
               onClick={() => setShowLeaderboard((prev) => !prev)}
               style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
             >
             {showLeaderboard ? 'Close Leaderboard': 'Leaderboard'}
             </button>
-            onClick={handleNewGame}
-            style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
+
+            <button
+              onClick={handleNewGame}
+              style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
           >
             New Game
           </button>
+
+            {showLeaderboard && (
+              <div className="leaderboard-dropdown">
+                <Leaderboard refreshKey={refreshLeaderboard}/>
+                </div>
+            )}
+         </div>
         </div>
         {/*Existing Board Controls*/}
         <Board
@@ -175,9 +184,6 @@ export default function SolitairePage() {
           selectedCard={selectedCard}
       />
 
-      {/*Scores Leaderboard*/}
-      <Leaderboard refreshKey={refreshLeaderboard} />
-    
       {/*Win Screen*/}
       <WinScreen
         moves={gameState.moves || 0}
