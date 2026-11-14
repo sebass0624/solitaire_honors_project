@@ -19,6 +19,8 @@ export default function SolitairePage() {
     const [refreshLeaderboard, setRefreshLeaderboard] = useState(0);
     //Triggers toggled leaderboard to take up minimal space on game board
     const [showLeaderboard, setShowLeaderboard] = useState(false);
+    //Holds a history that allows users to return to previous state (undo)
+    const [history, setHistory] = useState([]);
 
     //Initalizes deck state when component successfully mounts (game starts)
     useEffect(() => {
@@ -35,16 +37,39 @@ export default function SolitairePage() {
     //Helper function to restart the game if no valid moves are left
     const handleNewGame = () => {
       setSelectedCard(null);
+      setHistory([]);
       setGameState(createInitialState());
     }
 
+    //Saves current state to help in undoing previous move
+    const commitMove = (nextState) => {
+      if(!nextState || nextState === gameState) {
+        return;
+      }
+      setHistory((prev) => [...prev, gameState]);
+      setGameState({
+        ...nextState,
+        moves: (gameState.moves ?? 0) + 1,
+      });
+    };
+
+    //Reverts to most recent version when undo button is pressed
+    const handleUndo = () => {
+      if (history.length === 0) {
+        return;
+      }
+      const previousState = history[history.length - 1];
+      setHistory((prev) => prev.slice(0, -1));
+      setSelectedCard(null);
+      setGameState(previousState);
+    };
+
     //Helper function for clicking the stock pile
     const handleStockClick = () => {
-      if(gameState) {
-        //Clears the selected section when drawing a new card
+      if (gameState) {
         setSelectedCard(null);
         const updatedState = drawFromStock(gameState);
-        setGameState(updatedState);
+        commitMove(updatedState);
       }
     };
     
@@ -65,7 +90,7 @@ export default function SolitairePage() {
                 const autoFoundationState = moveToFoundation(gameState, source, candidateSelection.colIndex, targetCard.suit);
 
             if (autoFoundationState && autoFoundationState !== gameState) {
-              setGameState(autoFoundationState);
+              commitMove(autoFoundationState);
               return;
             }
 
@@ -80,7 +105,7 @@ export default function SolitairePage() {
               }
 
               if (autoTableauState && autoTableauState !== gameState) {
-                setGameState(autoTableauState);
+                commitMove(autoTableauState);
                 return;
               }
             }
@@ -108,7 +133,7 @@ export default function SolitairePage() {
           updatedState = moveWasteToTableau(gameState, targetColIndex);
         }
         else if(selectedCard.source === 'foundation') {
-          updatedState = moveFoundationToTableau(gameState, selectedCard.suit, targetColIndex);
+          updatedState = moveFoundationToTableau(gameState, selectedCard.suit || selectedCard.card?.suit, targetColIndex);
         }
       }
       
@@ -118,7 +143,7 @@ export default function SolitairePage() {
 
       //If move is considered valid by rules.js file
       if (updatedState) {
-          setGameState(updatedState);
+          commitMove(updatedState);
           setSelectedCard(null);
       }
       
@@ -157,8 +182,24 @@ export default function SolitairePage() {
           <div className="moves-counter">
               Moves: <span>{gameState.moves ?? 0}</span>
           </div>
-          {/*Holds toggleable leaderabord*/}
+          {/*Holds undo button and toggleable leaderabord*/}
           <div style={{position: 'relative', display: 'flex', alignItems: 'center', gap: '12px'}}>
+            <button
+              onClick = {handleUndo}
+              disabled = {history.length === 0}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '6px',
+                border: 'none',
+                background: '#2ed732',
+                color: '#fff',
+                cursor: history.length === 0 ? 'not-allowed' : 'pointer',
+                opacity: history.length === 0 ? 0.5 : 1,
+                fontWeight: 'bold',
+                fontSize: '0.85rem',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+              }}
+            > Undo </button>
             <button
               onClick={() => setShowLeaderboard((prev) => !prev)}
               style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
