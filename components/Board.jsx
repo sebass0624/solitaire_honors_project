@@ -67,3 +67,27 @@ export default function Board({ gameState, onStockClick, onCardClick, selectedCa
         </div>
     );
 }
+
+//TEMPORARY WIN FUNCTION FROM AI TO TEST WIN/WON'T BE PRESENT
+const forceWin = () => {
+  const suits = ["hearts", "diamonds", "clubs", "spades"]; // match your card suit names
+  const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+  const fullFoundations = suits.map((suit) =>
+    ranks.map((rank) => ({
+      suit,
+      rank,
+      faceUp: true,
+      id: `${rank}-${suit}`,
+    }))
+  );
+
+  // Update your game state with fullFoundations and empty tableau/stock/waste
+  setGameState((prev) => ({
+    ...prev,
+    foundations: fullFoundations,
+    tableau: [[], [], [], [], [], [], []],
+    stock: [],
+    waste: [],
+  }));
+};

@@ -5,7 +5,7 @@ import pool from '@/lib/db';
 export async function GET() {
     try {
         const [rows] = await pool.query(
-            'SELECT id, player_name AS playerNane, moves, time_seconds AS timeSeconds, created_at AS createdAt FROM leaderboard ORDER BY moves ASC, time_seconds ASC LIMIT 10'
+            'SELECT id, player_name AS playerName, moves, time_seconds AS timeSeconds, created_at AS createdAt FROM leaderboard ORDER BY moves ASC, time_seconds ASC LIMIT 10'
         );
         return NextResponse.json({success: true, data: rows}); 
     }
@@ -23,6 +23,7 @@ export async function POST(request) {
 
         //Accepts both types of cases for incoming request
         const playerName = body.playerName || body.player_name;
+        const score = body.score ?? 0;
         const moves = body.moves;
         const timeSeconds = body.timeSeconds !== undefined ? body.timeSeconds:body.time_seconds;
     
@@ -33,7 +34,7 @@ export async function POST(request) {
 
     const [result] = await pool.query(
         'INSERT INTO leaderboard (player_name, moves, time_seconds) VALUES (?, ?, ?)',
-    [playerName, moves, timeSeconds]
+      [playerName, score, moves, timeSeconds]
     );
 
     return NextResponse.json({message: 'Score saved successfully!', id: result.insertId}, {status: 201});

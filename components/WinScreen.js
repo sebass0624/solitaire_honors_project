@@ -3,7 +3,7 @@
 import {useState} from 'react';
 
 //Renders win screen when player places all 52 cards into foundation pile correctly
-export default function WinScreen({moves, timeSeconds, isOpen, onSubmitSuccess}) {
+export default function WinScreen({score = 0, moves, timeSeconds, isOpen, onSubmitSuccess}) {
     //Tracks input for player name
     const [playerName, setPlayerName] = useState('');
     //Handles loading state of asynchronous API 
@@ -30,11 +30,12 @@ export default function WinScreen({moves, timeSeconds, isOpen, onSubmitSuccess})
 
     try {
         //Sends POST request containing API data to next.js
-        const res = await fetch('/api/leaderboard', {
+        const res = await fetch('/api/games/leaderboard', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 player_name: playerName.trim(), //Modified player name
+                score: score, //Displays total Klondike score earned in won game
                 moves: moves, //Displays total moves made in won game
                 time_seconds: timeSeconds, //Displays total time elapsed in won gamea
             }),
@@ -66,7 +67,7 @@ return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
         <h2> You Won! </h2>
-        <p>Moves: <strong>{moves}</strong> | Time: <strong>{timeSeconds}s</strong></p>
+        <p>Score: <strong>{moves}</strong> | Time: <strong>{timeSeconds}s</strong></p>
         
         {/* Score submission form*/}
         <form onSubmit={handleSubmit}>

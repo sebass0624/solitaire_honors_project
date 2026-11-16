@@ -28,6 +28,11 @@ export default function SolitairePage() {
       setGameState(newGame);
     }, []);
 
+    //TEMPORARY WIN TRIGGER
+    const forceWin = () => {
+      setGameState((prev) => (prev ? { ...prev, isWon: true, isGameWon: true } : prev));
+    };
+
     //Helper function called when score submission to leaderboard succeeds
     const handleScoreSubmitted = () => {
       setGameState((prev) => (prev ? {...prev, isWon: false, isGameWon: false} : prev));
@@ -206,6 +211,9 @@ export default function SolitairePage() {
             >
             {showLeaderboard ? 'Close Leaderboard': 'Leaderboard'}
             </button>
+
+              {/*TEMPORARY WIN BUTTON, NOT PRESENT IN FINAL PRODUCT*/}
+            <button onClick={forceWin}>Test Win</button>
 
             <button
               onClick={handleNewGame}

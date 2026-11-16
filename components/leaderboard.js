@@ -67,17 +67,19 @@ export default function Leaderboard({refreshKey}) {
                         <tr style={{borderBottom: '2px solid #ccc', textAlign: 'left',}}>
                             <th style={cellStyle}>#</th>
                             <th style={cellStyle}>Player</th>
+                            <th style={cellStyle}>Score</th>
                             <th style={cellStyle}>Moves</th>
                             <th style={cellStyle}>Time</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {scores.map((score, index) => (
-                        <tr key= {score.id || index} style= {{borderBottom: '1px solid #eee'}}>
+                    {scores.map((entry, index) => (
+                        <tr key= {entry.id || index} style= {{borderBottom: '1px solid #eee'}}>
                             <td style={cellStyle}>{index + 1}</td>
-                            <td style={cellStyle}>{score.player_name || score.playerName || 'Anonymous'}</td>
-                            <td style={cellStyle}>{score.moves}</td>
-                            <td style={cellStyle}>{score.time_seconds ?? score.timeSeconds ?? 0}s</td>                                                        
+                            <td style={cellStyle}>{entry.player_name || entry.playerName || 'Anonymous'}</td>
+                            <td style={cellStyle}>{entry.score ?? 0}</td>
+                            <td style={cellStyle}>{entry.moves}</td>
+                            <td style={cellStyle}>{entry.time_seconds ?? entry.timeSeconds ?? 0}s</td>                                                        
                         </tr>
                      ))}
                 </tbody>
