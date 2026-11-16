@@ -28,7 +28,7 @@ export default function Board({ gameState, onStockClick, onCardClick, selectedCa
                     {/*Waste Pile*/}
                     <Pile 
                         cards={waste}
-                        onClick={() => onCardClick(topWasteCard, 'waste')}
+                        onClick={() => topWasteCard && onCardClick(topWasteCard, 'waste')}
                         isSelected={isWasteSelected} 
                     />
                 </div>
