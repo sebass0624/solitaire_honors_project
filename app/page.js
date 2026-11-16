@@ -8,6 +8,7 @@ import Leaderboard from '@/components/leaderboard';
 import {InitializeGame as createInitialState} from '../lib/solitaire/state.js';
 import {drawFromStock, moveFoundationToTableau, moveToFoundation, moveToTableau, moveWasteToTableau} from '@/lib/solitaire/rules.js';
 import WinScreen from '@/components/WinScreen';
+import WinCascade from '@/components/WinCascade';
 
 //Creates function that manages game loop state, selection, routing, and win screen
 export default function SolitairePage() {
@@ -237,8 +238,12 @@ export default function SolitairePage() {
           selectedCard={selectedCard}
       />
 
+      {/*Win Cascade Effect*/}
+      <WinCascade isActive={Boolean(gameState.isWon || gameState.isGameWon)} />
+      
       {/*Win Screen*/}
       <WinScreen
+        scores={gameState.score ?? 0}
         moves={gameState.moves || 0}
         timeSeconds={gameState.timer || gameState.timeSeconds || 0}
         isOpen={Boolean(gameState.isWon || gameState.isGameWon)}
