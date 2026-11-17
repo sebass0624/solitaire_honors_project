@@ -4,6 +4,7 @@ A full-stack Solitaire web application built using Next.js and MySQL. Features c
 
 ## Project Structure
 
+```text
 solitaire_honors_project/
 ├── app/
 │   ├── api/
@@ -29,6 +30,7 @@ solitaire_honors_project/
 │       └── state.js - Initializes and shuffles 52-card deck, deals cards, tracks moves, and more
 ├── .env.example - Provides template of required database connection environment for local setup
 └── package.json - Lists correctly installed project dependencies
+```
 
 ## Getting Started
 1. Node.js, MYSQLServer required
