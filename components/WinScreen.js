@@ -1,3 +1,4 @@
+'use strict';
 'use client';
 //Imports React
 import {useState} from 'react';

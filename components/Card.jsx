@@ -1,6 +1,9 @@
+'use strict';
 import React from 'react';
 
+// Maps numerical ranks to card letters
 const RANK_MAP = { 1: 'A', 11: 'J', 12: 'Q', 13: 'K' };
+// Maps suit names and symbols reliably
 const SUIT_SYMBOLS = {
   hearts: '♥', HEARTS: '♥', '♥': '♥',
   diamonds: '♦', DIAMONDS: '♦', '♦': '♦',
@@ -8,11 +11,19 @@ const SUIT_SYMBOLS = {
   spades: '♠', SPADES: '♠', '♠': '♠'
 };
 
+// Function component that accepts a card object and renders empty, face-down, or face-up designs
 export default function Card({ card, onClick, isSelected = false }) {
+  // Renders empty card slot if card object is null
   if (!card) {
-    return <div className="card empty-slot" style={{ width: '80px', height: '116px', borderRadius: '8px', border: '1.5px dashed rgba(255,255,255,0.3)' }} />;
+    return (
+      <div 
+        className="card empty-slot" 
+        style={{ width: '80px', height: '116px', borderRadius: '8px', border: '1.5px dashed rgba(255,255,255,0.3)' }} 
+      />
+    );
   }
 
+  // Renders face-down card and retains click handler stock flip events
   if (!card.faceUp) {
     return (
       <div 
@@ -32,13 +43,18 @@ export default function Card({ card, onClick, isSelected = false }) {
     );
   }
 
+  // Normalizes suit string to be consistent with deck.js
   const rawSuit = card.suit || card.suitType || '';
   const suitSymbol = SUIT_SYMBOLS[rawSuit] || rawSuit;
+
+  // Constant that converts numerical rank to the numbers using RANK_MAP
   const rankLabel = RANK_MAP[card.rank] || card.rank || card.value || '?';
 
+  // Determines color based off suit
   const isRed = rawSuit === 'HEARTS' || rawSuit === 'DIAMONDS' || rawSuit === 'hearts' || rawSuit === 'diamonds' || rawSuit === '♥' || rawSuit === '♦';
   const cardColor = isRed ? '#d32f2f' : '#111111';
 
+  // Renders face-up card with correct color/suit characteristics to the screen
   return (
     <div 
       onClick={onClick}

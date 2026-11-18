@@ -1,4 +1,5 @@
 //Makes next.js run this as interactive
+'use strict';
 'use client';
 
 //Importing react and other necessary components to allow game to run
