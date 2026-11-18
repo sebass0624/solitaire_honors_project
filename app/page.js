@@ -30,10 +30,18 @@ export default function SolitairePage() {
       setGameState(newGame);
     }, []);
 
-    //TEMPORARY WIN TRIGGER
-    const forceWin = () => {
-      setGameState((prev) => (prev ? { ...prev, isWon: true, isGameWon: true } : prev));
-    };
+    //Secret ALT + SHIFT + W to trigger win state during presentation
+    useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.altKey && e.shiftKey && e.key.toLowerCase() === 'w') {
+          e.preventDefault();
+          setGameState((prev) => (prev ? { ...prev, isWon: true, isGameWon: true } : prev));
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     //Helper function called when score submission to leaderboard succeeds
     const handleScoreSubmitted = () => {
@@ -213,9 +221,6 @@ export default function SolitairePage() {
             >
             {showLeaderboard ? 'Close Leaderboard': 'Leaderboard'}
             </button>
-
-              {/*TEMPORARY WIN BUTTON, NOT PRESENT IN FINAL PRODUCT*/}
-            <button onClick={forceWin}>Test Win</button>
 
             <button
               onClick={handleNewGame}
