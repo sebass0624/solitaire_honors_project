@@ -46,7 +46,8 @@ export default function WinCascade({isActive}) {
                 queue.push({rank, suit: SUITS[s], foundationIndex:s})
             }
         }
-
+        
+        //Attribution: HTML5 Canvas trail-stamping and 2D bounce physics adapted with AI assistance (LINES 50-103)
         //Controls card dimensions and movement properties
         const cardW = 80;
         const cardH = 112;
