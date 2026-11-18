@@ -243,7 +243,7 @@ export default function SolitairePage() {
       
       {/*Win Screen*/}
       <WinScreen
-        scores={gameState.score ?? 0}
+        score={gameState.score ?? 0}
         moves={gameState.moves || 0}
         timeSeconds={gameState.timer || gameState.timeSeconds || 0}
         isOpen={Boolean(gameState.isWon || gameState.isGameWon)}
