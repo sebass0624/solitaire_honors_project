@@ -72,4 +72,4 @@ npm run dev
 
 ## Acknowledgments
 
-- **Win Cascade Animation (`components/WinCascade.js`):** The HTML5 Canvas trail-rendering technique (stamping frames without clearing the canvas) and 2D gravity/bounce physics loop were adapted from standard JavaScript/Canvas Solitaire cascade examples and AI-assisted code generation, then integrated into the React lifecycle and layered with the `WinScreen` modal.
+- **Win Cascade Animation (`components/WinCascade.js`):** The Canvas trail-rendering technique and 2D gravity/bounce physics loop were adapted from standard JavaScript/Canvas Solitaire cascade examples and AI-assisted code generation, then I integrated it myself into the React lifecycle and layered with the `WinScreen` modal.
