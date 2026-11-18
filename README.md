@@ -2,7 +2,36 @@
 
 A full-stack Solitaire web application built using Next.js and MySQL. Features complete gameplay, move/time tracking, scorekeeping, a bouncing-card win animation, and a persistent Top 10 leaderboard.
 
-## Project Structure
+# Live Demo
+Try the app here: https://solitaire-honors-project.vercel.app/
+
+## Features
+
+- **Standard Gameplay:** Full 52-card deck initialization, stock/waste drawing and recycling, 7 tableau columns, and 4 suit foundation piles.
+- **Card Interaction:** Click-to-move selection, automatic foundation/tableau moves on single click, and multi-card stack transfers.
+- **Undo System:** Full state history allowing players to step back through previous moves.
+- **Klondike Scoring Engine:**
+  - Move card to Foundation: **+10 points**
+  - Move card from Waste to Tableau: **+5 points**
+  - Flip a face-down Tableau card: **+5 points**
+  - Move card from Foundation back to Tableau: **-15 points**
+  - Recycle Waste back to Stock (after the first pass): **-100 points** (score floors at `0`)
+- **Persistent Cloud Leaderboard:** Displays the top 10 scores ranked by highest score, fewest moves, and fastest completion time, backed by **Aiven MySQL**.
+                                                                                        
+## Database Structure
+
+```sql
+CREATE TABLE IF NOT EXISTS leaderboard (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  player_name VARCHAR(50) NOT NULL,
+  score INT NOT NULL DEFAULT 0,
+  moves INT NOT NULL,
+  time_seconds INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## Project Directory
 
 ```text
 solitaire_honors_project/
@@ -31,44 +60,6 @@ solitaire_honors_project/
 ├── .env.example - Provides template of required database connection environment variables for local setup
 └── package.json - Lists installed project dependencies and npm scripts
 ```
-
-## Getting Started
-
-1. **Prerequisites:** Install Node.js (v18+) and MySQL Server.
-
-2. **Database Setup:** Create the database and table by running this SQL once in MySQL:
-
-```sql
-CREATE DATABASE IF NOT EXISTS solitaire_db;
-USE solitaire_db;
-
-CREATE TABLE IF NOT EXISTS leaderboard (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  player_name VARCHAR(50) NOT NULL,
-  score INT NOT NULL DEFAULT 0,
-  moves INT NOT NULL,
-  time_seconds INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-3. **Environment Variables:** Copy `.env.example` to `.env` in the project root and replace `your_password` with your MySQL credentials:
-
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=solitaire_db
-```
-
-4. **Install & Start:**
-
-```bash
-npm install
-npm run dev
-```
-
-5. **Play:** Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Acknowledgments
 
