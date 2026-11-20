@@ -1,4 +1,5 @@
 //Imports react and necessary attributes from other code files
+'use strict';
 import React from 'react';
 import Pile from './Pile';
 import TableauColumn from './TableauColumn';

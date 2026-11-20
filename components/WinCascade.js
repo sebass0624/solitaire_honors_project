@@ -1,3 +1,4 @@
+'use strict';
 'use client';
 
 //Imports required react hooks for effect

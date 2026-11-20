@@ -1,4 +1,5 @@
 //Makes next.js run this as interactive
+'use strict';
 'use client';
 
 //Importing react and other necessary components to allow game to run
@@ -29,10 +30,18 @@ export default function SolitairePage() {
       setGameState(newGame);
     }, []);
 
-    //TEMPORARY WIN TRIGGER
-    const forceWin = () => {
-      setGameState((prev) => (prev ? { ...prev, isWon: true, isGameWon: true } : prev));
-    };
+    //Secret ALT + SHIFT + W to trigger win state during presentation
+    useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.altKey && e.shiftKey && e.key.toLowerCase() === 'w') {
+          e.preventDefault();
+          setGameState((prev) => (prev ? { ...prev, isWon: true, isGameWon: true } : prev));
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     //Helper function called when score submission to leaderboard succeeds
     const handleScoreSubmitted = () => {
@@ -213,9 +222,6 @@ export default function SolitairePage() {
             {showLeaderboard ? 'Close Leaderboard': 'Leaderboard'}
             </button>
 
-              {/*TEMPORARY WIN BUTTON, NOT PRESENT IN FINAL PRODUCT*/}
-            <button onClick={forceWin}>Test Win</button>
-
             <button
               onClick={handleNewGame}
               style={{padding: '8px 16px', borderRadius: '5px', border: 'none', background: '#2e7d32', color: '#fff', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}
@@ -243,7 +249,7 @@ export default function SolitairePage() {
       
       {/*Win Screen*/}
       <WinScreen
-        scores={gameState.score ?? 0}
+        score={gameState.score ?? 0}
         moves={gameState.moves || 0}
         timeSeconds={gameState.timer || gameState.timeSeconds || 0}
         isOpen={Boolean(gameState.isWon || gameState.isGameWon)}

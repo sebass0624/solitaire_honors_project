@@ -1,3 +1,4 @@
+'use strict';
 'use client';
 //Imports React
 import {useState} from 'react';
@@ -67,7 +68,7 @@ return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
         <h2> You Won! </h2>
-        <p>Score: <strong>{moves}</strong> | Time: <strong>{timeSeconds}s</strong></p>
+        <p>Score: <strong>{score}</strong> | Time: <strong>{timeSeconds}s</strong></p>
         
         {/* Score submission form*/}
         <form onSubmit={handleSubmit}>
