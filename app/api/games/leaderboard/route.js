@@ -1,3 +1,5 @@
+'use strict';
+
 import {NextResponse} from 'next/server';
 import pool from '@/lib/db';
 
@@ -5,7 +7,7 @@ import pool from '@/lib/db';
 export async function GET() {
     try {
         const [rows] = await pool.query(
-            'SELECT id, player_name AS playerName, moves, time_seconds AS timeSeconds, created_at AS createdAt FROM leaderboard ORDER BY moves ASC, time_seconds ASC LIMIT 10'
+            'SELECT id, player_name AS playerName, score, moves, time_seconds AS timeSeconds, created_at AS createdAt FROM leaderboard ORDER BY score DESC, moves ASC, time_seconds ASC LIMIT 10'
         );
         return NextResponse.json({success: true, data: rows}); 
     }
@@ -33,7 +35,7 @@ export async function POST(request) {
     }
 
     const [result] = await pool.query(
-        'INSERT INTO leaderboard (player_name, moves, time_seconds) VALUES (?, ?, ?)',
+        'INSERT INTO leaderboard (player_name, score, moves, time_seconds) VALUES (?, ?, ?, ?)',
       [playerName, score, moves, timeSeconds]
     );
 
