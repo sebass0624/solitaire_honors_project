@@ -70,9 +70,9 @@ export default function SolitairePage() {
 
     //Reverts to most recent version when undo button is pressed
     const handleUndo = () => {
-      ///if (history.length === 0) {
-        //return;
-      //}
+      if (history.length === 0) {
+        return;
+      }
       const previousState = history[history.length - 1];
       setHistory((prev) => prev.slice(0, -1));
       setSelectedCard(null);
