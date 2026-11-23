@@ -11,9 +11,9 @@ import {drawFromStock, moveFoundationToTableau, moveToFoundation, moveToTableau,
 import WinScreen from '@/components/WinScreen';
 import WinCascade from '@/components/WinCascade';
 
-//Creates function that manages game loop state, selection, routing, and win screen
+//Creates function that manages game loop state, selection, undo history, card routing, and win screen
 export default function SolitairePage() {
-    //Game engine state variable
+    //Game engine state variable that initializes hook for active decks, selected cards, leaderboard refreshing, and undo history
     const [gameState, setGameState] = useState(null);
     //Declares state to track currently selected card with all necessary card parameters
     const [selectedCard, setSelectedCard] = useState(null);
@@ -43,7 +43,7 @@ export default function SolitairePage() {
       return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    //Helper function called when score submission to leaderboard succeeds
+    //Helper function called when score submission to leaderboard succeeds and refreshs
     const handleScoreSubmitted = () => {
       setGameState((prev) => (prev ? {...prev, isWon: false, isGameWon: false} : prev));
       setRefreshLeaderboard((prev) => prev + 1);
@@ -70,16 +70,16 @@ export default function SolitairePage() {
 
     //Reverts to most recent version when undo button is pressed
     const handleUndo = () => {
-      if (history.length === 0) {
-        return;
-      }
+      ///if (history.length === 0) {
+        //return;
+      //}
       const previousState = history[history.length - 1];
       setHistory((prev) => prev.slice(0, -1));
       setSelectedCard(null);
       setGameState(previousState);
     };
 
-    //Helper function for clicking the stock pile
+    //Helper function for clicking and drawing next card from the stock pile and commits the move
     const handleStockClick = () => {
       if (gameState) {
         setSelectedCard(null);
@@ -101,7 +101,7 @@ export default function SolitairePage() {
                     cardIndex
                 };
 
-                //Tries auto-move to foundation based on card's suit
+                //Tries auto-move to foundation based on card's suit if rules check out
                 const autoFoundationState = moveToFoundation(gameState, source, candidateSelection.colIndex, targetCard.suit);
 
             if (autoFoundationState && autoFoundationState !== gameState) {
@@ -109,7 +109,7 @@ export default function SolitairePage() {
               return;
             }
 
-            //Attempts an automove if the foundation carad move isn't found to be valid
+            //Attempts an automove if the foundation card move to the tableau is found to be valid
             for (let colIndx = 0; colIndx < gameState.tableau.length; colIndx++) {
               let autoTableauState = null;
               if (source === 'tableau' && colIndx !== candidateSelection.colIndex) {
@@ -125,12 +125,13 @@ export default function SolitairePage() {
               }
             }
 
+            //Highlights card if move isn't currently available
             setSelectedCard(candidateSelection);
           }
         return;
       }
 
-      //Case 2: Clicking exact card -> deselect it
+      //Case 2: Clicking exact card a second time -> deselect it
       if(selectedCard.card?.id === targetCard?.id || selectedCard.card === targetCard) {
         setSelectedCard(null);
         return;
@@ -179,7 +180,7 @@ export default function SolitairePage() {
       }
     };
 
-    //Checks if game has fully loaded in or not and initalizes it
+    //Checks if game has fully loaded in and if not puts in a Loading... placeholder in the meantime
     if(!gameState) {
       return (
         <main className="solitaire-container">
@@ -188,6 +189,7 @@ export default function SolitairePage() {
       );
     }
 
+    //Renders top control bar, interactive game board, win cascade animation, score submission modal
     return (
       <main className="solitaire-container">
         {/*Solitaire bold icon and new game button*/}
